@@ -1,45 +1,43 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>metronomo</title>
+        <title>Metrónomo</title>
+        <meta charset="UTF-8">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+        <meta name="description" content="Metrónomo para entrenar con tempo">
+        <meta name="keywords" content="tempo, entreno, workout">
+        <meta name="author" content="Roberto Regueiro">
+        <meta property="og:image" content="http://esepejota.es/metronomo/img/capture.png" />
+
         <link rel="stylesheet" href="./css/style.css">
     </head>
-<body>
+<body class="">
     <div class="container">
-      <section class="metronome-container">
-        
-        <div class="counter"></div>
-        
-        <i class="fa fa-cog options-btn"></i>
-    
+        <div class="play-btn"></div>
+
         <div class="controls">
-          <label>BPM: <span>
-                        <i class="fa fa-minus bpm-minus"></i>
-                        <input type="text" value="60" class="bpm-input" />
-                        <i class="fa fa-plus bpm-plus"></i>
-                      </span>
-          </label>
-          <label>
-            Beat: <input type="text" value="4" class="ts-top" /></label>
-          <div style="margin-bottom: 15px;">
-            <input type="checkbox" id="timer-check" />
-            <label for="timer-check"></label>
-            
-            Timer: <input type="text" value="60" class="timer" />
-          </div>
-    
-          <button class="tap-btn">Tap</button>
-          <button class="play-btn">Play</button>
+            <img src="./img/control.svg" />
         </div>
-        
-        <div class="options">
-          <i class="fa fa-caret-down up"></i>
-          <label>Off Beat Pitch: <input type="range" min="0" max="500" value="200" class="beat-range" /></label>
-          <label>Accent Pitch: <input type="range" min="0" max="500" value="380" class="accent-range" /></label>
-        </div>
-      </section>
+
+        <section class="metronome-container">
+            <div id="counter1" class="counter"></div>
+            <div id="counter2" class="counter"></div>
+            <div id="counter3" class="counter"></div>
+            <div id="counter4" class="counter"></div>
+        </section>
     </div>
-    <script type="text/javascript" src="js/jquery.min.js"></script>
-    <script type="text/javascript" src="js/metronome.js"></script>
+    <div id="overlay">
+        <input type="text" value="4" class="counter1 tempoData" />
+        <input type="text" value="0" class="counter2 tempoData" />
+        <input type="text" value="2" class="counter3 tempoData" />
+        <input type="text" value="0" class="counter4 tempoData" />
+        <div id="closeOverlay">
+            close
+        </div>
+    </div>
+
+     <script data-main="js/main" src="js/require.js"></script>
 </body>
 </html>
