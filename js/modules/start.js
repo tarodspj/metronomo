@@ -1,13 +1,24 @@
-define(['jquery', 'modules/drawTimesLauncher', 'domready'],
-  function($, drawTimes, domready) {
+define(['jquery', 'domready', 'modules/drawTimesLauncher','modules/checkAudio', 'modules/audioObject', 'modules/playNote'],
+  function($, domready, drawTimes, checkAudio, audioObject, playNote) {
     var timer, audioCtx, noteCount, cuantosDots, accentPitch = 700, offBeatPitch = 280;
     var delta = 0;
     var curTime = 0.0;
-    var AudioContext =  window.AudioContext // Default
-                        || window.webkitAudioContext // Safari and old versions of Chrome
-                        || false;
+    var AudioContext =  checkAudio;
+
     if (AudioContext) {
-        audioCtx = new ( window.AudioContext || window.webkitAudioContext )();
+        audioCtx = audioObject;
+        console.log(audioCtx.currentTime);
+        domready(function() {
+              $('.controls').on('click', function() {
+                  $('body' ).addClass('overlay');
+                  $('.play-btn' ).removeClass('play');
+                  window.clearInterval(timer);
+              });
+              $('#closeOverlay').on('click', function() {
+                  $('body').removeClass('overlay');
+              });
+
+          });
     }
     else {
         $('body').append('<h1>Sorry, but the Web Audio API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox</h1>');
@@ -16,7 +27,7 @@ define(['jquery', 'modules/drawTimesLauncher', 'domready'],
     function schedule() {
 
       while(curTime < audioCtx.currentTime + 0.1) {
-        playNote(curTime);
+        playNote.play(curTime);
         updateTime();
       }
 
@@ -29,32 +40,7 @@ define(['jquery', 'modules/drawTimesLauncher', 'domready'],
     }
 
     /* Play note on a delayed interval of t */
-    function playNote(t) {
 
-        var note =    audioCtx.createOscillator();
-        note.detune.value = 300;
-        //note.type = 'sawtooth';
-
-        if( noteCount == cuantosDots  ){
-          noteCount = 0;
-        }
-
-        if( $( '.svgContainer' ).eq( noteCount ).hasClass( 'specialDot' ) ) {
-
-            note.frequency.value = accentPitch;
-        }
-        else {
-          note.frequency.value = offBeatPitch;
-        }
-
-        note.connect( audioCtx.destination );
-
-        note.start( t );
-        note.stop( t + 0.09 );
-
-        $( '.svgContainer' ).removeClass( 'active' );
-        $( '.svgContainer' ).eq( noteCount ).addClass( 'active' );
-    }
 
     /* Play and stop button */
     $( '.play-btn' ).on('click', function() {
@@ -81,17 +67,5 @@ define(['jquery', 'modules/drawTimesLauncher', 'domready'],
 
     // Load up dots on pageload
 
-
-domready(function() {
-        $('.controls').on('click', function() {
-            $('body' ).addClass('overlay');
-            $('.play-btn' ).removeClass('play');
-            window.clearInterval(timer);
-        });
-        $('#closeOverlay').on('click', function() {
-            $('body').removeClass('overlay');
-        });
-
-    });
 
 });
