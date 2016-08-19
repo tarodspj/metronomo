@@ -1,24 +1,45 @@
-define(['jquery', 'domready', 'modules/drawTimesLauncher','modules/checkAudio', 'modules/audioObject', 'modules/playNote'],
+define(['jquery', 'domready', 'modules/drawTimes','modules/checkAudio', 'modules/audioObject', 'modules/playNote'],
   function($, domready, drawTimes, checkAudio, audioObject, playNote) {
-    var timer, audioCtx, noteCount, cuantosDots, accentPitch = 700, offBeatPitch = 280;
+    var timer, audioCtx, noteCount, cuantosDots;
     var delta = 0;
     var curTime = 0.0;
     var AudioContext =  checkAudio;
+
+    function listeners() {
+      $('.tempoData').on('change', function() {
+
+          var idChanged =   $( this ).attr( 'class' );
+          idChanged =       idChanged.replace( ' tempoData', '' );
+
+          //drawTimes(idChanged);
+          drawTimes.draw(idChanged);
+      });
+      $('.controls').on('click', function() {
+          $('body' ).addClass('overlay');
+          $('.play-btn' ).removeClass('play');
+          window.clearInterval(timer);
+      });
+      $('#closeOverlay').on('click', function() {
+          $('body').removeClass('overlay');
+      });
+    }
+
+    function start() {
+      var $tempoData = $('.tempoData');
+
+      $tempoData.each( function(index, value) {
+          drawTimes.draw('counter' + parseInt(index + 1));
+      });
+
+    }
 
     if (AudioContext) {
         audioCtx = audioObject;
         console.log(audioCtx.currentTime);
         domready(function() {
-              $('.controls').on('click', function() {
-                  $('body' ).addClass('overlay');
-                  $('.play-btn' ).removeClass('play');
-                  window.clearInterval(timer);
-              });
-              $('#closeOverlay').on('click', function() {
-                  $('body').removeClass('overlay');
-              });
-
-          });
+          listeners();
+          start();
+        });
     }
     else {
         $('body').append('<h1>Sorry, but the Web Audio API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox</h1>');

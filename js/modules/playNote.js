@@ -1,18 +1,22 @@
 define(['jquery', 'domready','modules/audioObject'],
 function($, domready, audioObject) {
-  var accentPitch = 700, offBeatPitch = 280, cuantosDots, noteCount;
+  var accentPitch = 700,
+      offBeatPitch = 280,
+      cuantosDots,
+      noteCount;
+      
   domready(function() {
     cuantosDots =   parseInt( $( '.dot' ).length );
     noteCount =     parseInt( $( '.dot' ).length );
   });
   return {
     play: function(t) {
-      var audioCtx = audioObject;
-        var note = audioCtx.createOscillator();
+      var audioCtx = audioObject,
+          note = audioCtx.createOscillator();
 
         note.detune.value = 300;
 
-        if(noteCount == cuantosDots ){
+        if(noteCount === cuantosDots ){
           noteCount = 0;
         }
 
